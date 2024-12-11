@@ -1,14 +1,19 @@
+from funcs import *
+import time
+now = time.strftime("%d %b %Y, %H:%M")
+print(now)
+
 while True:
     user=input("Type add, show, edit, complete or quit\n")
     user=user.strip()
     if user.startswith('add') or user.startswith('new'):
         todo=user[4:]
 
-        with open('todos.txt','r') as file:
-                todos=file.readlines()
+        todos=get_todos()
 
-        with open('todos.txt','w') as file:
-                file.writelines(todos)
+        todos.append(todo + '\n')
+
+        write_todos(todos)
 
     elif user.startswith('show'):
             with open('todos.txt', 'r') as file:
@@ -23,14 +28,12 @@ while True:
             number=int(user[5:])
             number=number-1
 
-            with open('todos.txt', 'r') as file:
-                todos = file.readlines()
+            todos = get_todos()
 
-                new_todo=input("Enter edited TODO\n")
-                todos[number]=new_todo + '\n'
+            new_todo=input("Enter edited TODO\n")
+            todos[number]=new_todo + '\n'
 
-            with open('todos.txt', 'w') as file:
-                file.writelines(todos)
+            write_todos(todos)
         except ValueError:
             print('Nope, you need to input a number')
             continue
@@ -39,15 +42,14 @@ while True:
         try:
             number = int(user[9:])
 
-            with open('todos.txt', 'r') as file:
-                todos = file.readlines()
+            todos = get_todos()
+
             index=number-1
             todo_to_remove=todos[index].strip('\n')
 
             todos.pop(index)
 
-            with open('todos.txt','w') as file:
-                file.writelines(todos)
+            write_todos(todos)
 
             message=f"TODO '{todo_to_remove}' was removed from the list."
             print(message)
